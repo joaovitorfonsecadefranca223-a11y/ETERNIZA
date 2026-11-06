@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7e9e4">
+<title>ETERNIZA — Suas memórias, para sempre</title>
+<style>
+:root{--rose:#b86f80;--rose-dark:#8f4e60;--pink:#f3dce0;--cream:#fbf6ef;--sand:#ead9c8;--ink:#59464a}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+button,input,textarea{font:inherit}button{cursor:pointer}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px clamp(16px,5vw,60px);background:#fffaf6;border-bottom:1px solid #efdfd9;position:sticky;top:0;z-index:5}
+.brand{font-size:23px;letter-spacing:4px;color:var(--rose-dark);font-weight:bold}.brand small{display:block;font:10px Arial,sans-serif;letter-spacing:2px;text-align:center;margin-top:3px}
+.nav{font:13px Arial,sans-serif;color:#8c7474}
+.hero{padding:55px 20px 44px;text-align:center;background:linear-gradient(135deg,#f7e8e7,#f8efe4)}
+.eyebrow{font:11px Arial,sans-serif;letter-spacing:3px;text-transform:uppercase;color:var(--rose-dark)}
+h1{font-size:clamp(38px,8vw,68px);font-weight:normal;line-height:1.05;margin:14px auto;color:#76535a;max-width:760px}
+.hero p{font:15px/1.7 Arial,sans-serif;color:#806d6d;max-width:540px;margin:0 auto 24px}
+.primary,.secondary{border:0;border-radius:30px;padding:14px 24px;font:14px Arial,sans-serif;transition:.2s}
+.primary{background:var(--rose);color:white;box-shadow:0 7px 18px #b86f8033}.primary:hover{background:var(--rose-dark);transform:translateY(-1px)}
+.secondary{background:#fff;border:1px solid #e8cfd1;color:var(--rose-dark)}
+main{max-width:1100px;margin:auto;padding:36px 18px 70px}
+.section-title{text-align:center;font-size:30px;font-weight:normal;color:#76535a;margin:10px 0 8px}
+.sub{text-align:center;font:13px Arial,sans-serif;color:#927d7b;margin:0 0 28px}
+.editor{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:26px;align-items:start}
+.panel{background:#fff;border:1px solid #efdfd9;border-radius:20px;padding:20px;box-shadow:0 12px 35px #8f4e600d}
+.panel h3{font-size:20px;font-weight:normal;margin:0 0 16px;color:#805660}
+.field{margin:0 0 14px}.field label{display:block;font:12px Arial,sans-serif;color:#806d6d;margin-bottom:7px}
+input[type=text],textarea,select{width:100%;border:1px solid #ead9d3;border-radius:11px;padding:11px 12px;background:#fffdfa;color:var(--ink);font:14px Arial,sans-serif;outline-color:#c78b98}
+textarea{min-height:76px;resize:vertical}
+input[type=file]{width:100%;font:12px Arial,sans-serif;color:#806d6d}
+.hint{font:11px/1.5 Arial,sans-serif;color:#a18d88;margin-top:6px}
+.preview-wrap{background:#f4e7df;border-radius:22px;padding:22px;min-height:440px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.book-stage{width:min(100%,620px);perspective:1600px}
+.book{position:relative;width:100%;aspect-ratio:1.48/1;display:grid;grid-template-columns:1fr 1fr;filter:drop-shadow(0 18px 18px #6c4c4c25)}
+.page{background:#fffdf8;position:relative;overflow:hidden;padding:clamp(12px,3vw,26px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px solid #eadfd5}
+.page.left{transform-origin:right center;border-radius:8px 0 0 8px;background:linear-gradient(90deg,#f7f0e8,#fffdf8)}
+.page.right{transform-origin:left center;border-radius:0 8px 8px 0;background:linear-gradient(90deg,#fffdf8,#f8f1e9)}
+.page h2{font-size:clamp(17px,3vw,29px);font-weight:normal;color:#9c6270;margin:8px 0}
+.page p{font:clamp(9px,1.5vw,13px)/1.5 Arial,sans-serif;color:#846f70;white-space:pre-wrap;max-width:95%}
+.photo{width:100%;height:66%;object-fit:cover;border:6px solid white;box-shadow:0 3px 14px #5a42421c;background:#f1e7df}
+@keyframes pageTurn{from{transform:rotateY(-24deg);opacity:.65}to{transform:rotateY(0);opacity:1}}\n.page.turning{animation:pageTurn .42s ease both}\n.cover{background:linear-gradient(145deg,#d99daa,#b96f80)!important;color:white!important}
+.cover h2,.cover p{color:white}
+.cover .photo{display:none}
+.page-num{position:absolute;bottom:8px;font:10px Arial,sans-serif;color:#b29b92}
+.book-controls{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:20px;font:12px Arial,sans-serif;color:#806d6d}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:38px}
+.step{background:#fff;border:1px solid #efdfd9;border-radius:16px;padding:18px;text-align:center}
+.step b{display:block;color:#9b6270;margin:7px 0;font-size:17px;font-weight:normal}.step span{font:12px/1.5 Arial,sans-serif;color:#927d7b}
+footer{text-align:center;padding:28px 15px;background:#f4e7df;color:#987f7c;font:11px Arial,sans-serif}
+.toast{font:12px Arial,sans-serif;color:#8d5b68;text-align:center;min-height:18px;margin-top:8px}
+@media(max-width:760px){.editor{grid-template-columns:1fr}.preview-wrap{min-height:300px;padding:12px}.book{aspect-ratio:1.12/1}.page{padding:9px}.photo{height:60%;border-width:4px}.steps{grid-template-columns:1fr}.topbar{padding:13px 16px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">ETERNIZA<small>SUAS MEMÓRIAS, PARA SEMPRE</small></div>
+  <div class="nav">Álbuns feitos com carinho ♡</div>
+</header>
+<section class="hero">
+  <div class="eyebrow">Momentos que merecem ficar</div>
+  <h1>Transforme lembranças<br>em histórias.</h1>
+  <p>Crie um álbum digital especial, com suas fotos, suas palavras e páginas que viram como um livro de verdade.</p>
+  <button class="primary" onclick="document.getElementById('criador').scrollIntoView({behavior:'smooth'})">Criar meu álbum ♡</button>
+</section>
+<main id="criador">
+  <h2 class="section-title">Seu álbum começa aqui</h2>
+  <p class="sub">Personalize a capa, escolha uma foto e escreva sua mensagem.</p>
+  <div class="editor">
+    <section class="panel">
+      <h3>Personalize seu álbum</h3>
+      <div class="field"><label for="title">Título da capa</label><input id="title" type="text" maxlength="48" value="Nossa história"></div>
+      <div class="field"><label for="dedication">Mensagem especial</label><textarea id="dedication" maxlength="220">Cada lembrança ao seu lado merece ser guardada para sempre.</textarea></div>
+      <div class="field"><label for="photoUpload">Adicionar uma foto</label><input id="photoUpload" type="file" accept="image/*"></div>
+      <div class="field"><label for="caption">Legenda da foto</label><input id="caption" type="text" maxlength="90" placeholder="Ex.: Um dia inesquecível"></div>
+      <div class="field"><label for="coverColor">Cor da capa</label><select id="coverColor"><option value="rose">Rosa antigo</option><option value="beige">Bege delicado</option><option value="wine">Vinho elegante</option></select></div>
+      <button class="primary" id="addPage" style="width:100%">Adicionar página ao álbum</button>
+      <p class="hint">Dica: escolha uma foto da galeria do celular. Você pode adicionar várias páginas.</p>
+      <div class="toast" id="status" aria-live="polite"></div>
+    </section>
+    <section class="preview-wrap">
+      <div class="book-stage">
+        <div class="book" id="book">
+          <article class="page left cover" id="leftPage"><div class="eyebrow" style="color:#fff">Um livro de memórias</div><h2 id="coverTitle">Nossa história</h2><p id="coverDedication">Feito com carinho ♡</p><span class="page-num">♡</span></article>
+          <article class="page right" id="rightPage"><img class="photo" id="previewPhoto" alt="Prévia da foto do álbum" src=""><h2 id="previewCaption">Um momento especial</h2><p>Algumas lembranças merecem seu próprio capítulo.</p><span class="page-num">1</span></article>
+        </div>
+      </div>
+      <div class="book-controls">
+        <button class="secondary" id="prev">← Anterior</button>
+        <span id="pageLabel">Capa • Página 1</span>
+        <button class="secondary" id="next">Próxima →</button>
+      </div>
+    </section>
+  </div>
+  <div class="steps">
+    <div class="step"><div>♡</div><b>Escolha suas fotos</b><span>Use imagens da sua galeria para contar sua história.</span></div>
+    <div class="step"><div>✎</div><b>Escreva sua mensagem</b><span>Adicione legendas e dedicatórias cheias de significado.</span></div>
+    <div class="step"><div>❀</div><b>Folheie seu álbum</b><span>Veja a prévia e passe as páginas pelo celular.</span></div>
+  </div>
+</main>
+<footer>ETERNIZA · Suas memórias, para sempre. <br>Esta é uma versão inicial de demonstração.</footer>
+<script>
+const $=id=>document.getElementById(id);
+let pages=[], current=0, coverColor='rose', tempPhoto='';
+const palettes={rose:['#d99daa','#b96f80'],beige:['#cbb59e','#a88d74'],wine:['#9c6675','#744452']};
+function updateCover(){
+  $('coverTitle').textContent=$('title').value||'Nossa história';
+  $('coverDedication').textContent=$('dedication').value||'Feito com carinho ♡';
+  coverColor=$('coverColor').value;
+  $('leftPage').style.background=`linear-gradient(145deg,${palettes[coverColor][0]},${palettes[coverColor][1]})`;
+}
+['title','dedication','coverColor'].forEach(id=>$(id).addEventListener('input',updateCover));
+$('photoUpload').addEventListener('change',e=>{
+  const f=e.target.files&&e.target.files[0]; if(!f)return;
+  if(!f.type.startsWith('image/')){ $('status').textContent='Escolha um arquivo de imagem.';return; }
+  const reader=new FileReader(); reader.onload=()=>{tempPhoto=reader.result; $('previewPhoto').src=tempPhoto; $('status').textContent='Foto carregada na prévia.';}; reader.readAsDataURL(f);
+});
+function render(){
+  const total=pages.length;
+  if(current===0){$('leftPage').className='page left cover';$('leftPage').style.background=`linear-gradient(145deg,${palettes[coverColor][0]},${palettes[coverColor][1]})`; $('coverTitle').textContent=$('title').value||'Nossa história';$('coverDedication').textContent=$('dedication').value||'Feito com carinho ♡';
+    $('rightPage').innerHTML=`<img class="photo" id="previewPhoto" alt="Foto do álbum" src="${total?pages[0].photo:(tempPhoto||'')}"><h2 id="previewCaption">${total?escapeHtml(pages[0].caption||'Um momento especial'):'Um momento especial'}</h2><p>${total?'Uma lembrança guardada com carinho.':'Algumas lembranças merecem seu próprio capítulo.'}</p><span class="page-num">1</span>`;
+    $('pageLabel').textContent='Capa • Página 1';
+  }else{
+    const p=pages[current-1]; $('leftPage').className='page left';$('leftPage').style.background='linear-gradient(90deg,#f7f0e8,#fffdf8)';
+    $('leftPage').innerHTML=`<h2>${escapeHtml(p.caption||'Um instante especial')}</h2><p>${escapeHtml(p.note||'Uma lembrança para guardar no coração.')}</p><span class="page-num">${current*2}</span>`;
+    $('rightPage').innerHTML=`<img class="photo" alt="Foto do álbum" src="${p.photo}"><h2>${escapeHtml(p.caption||'Nossa lembrança')}</h2><p>Para sempre na memória ♡</p><span class="page-num">${current*2+1}</span>`;
+    $('pageLabel').textContent=`Página ${current+1} de ${total+1}`;
+  }
+  ['leftPage','rightPage'].forEach(id=>{const el=$(id);el.classList.remove('turning');void el.offsetWidth;el.classList.add('turning');});\n  $('prev').disabled=current===0;$('next').disabled=current>=total;
+  $('prev').style.opacity=current===0?'.45':'1';$('next').style.opacity=current>=total?'.45':'1';
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+$('addPage').addEventListener('click',()=>{
+  if(!tempPhoto){$('status').textContent='Adicione uma foto antes de criar a página.';return;}
+  pages.push({photo:tempPhoto,caption:$('caption').value,note:$('dedication').value});
+  current=pages.length;tempPhoto='';$('photoUpload').value='';$('caption').value='';
+  $('status').textContent='Página adicionada ao seu álbum!';render();
+});
+$('prev').addEventListener('click',()=>{if(current>0){current--;render();}});
+$('next').addEventListener('click',()=>{if(current<pages.length){current++;render();}});
+updateCover();render();
+</script>
+</body>
+</html>
